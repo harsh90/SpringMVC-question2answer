@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="com.onlinetutoring.model.Answers" />
+		<mapping class="com.onlinetutoring.model.QuestionCategory" />
+		<mapping class="com.onlinetutoring.model.Questions" />
+		<mapping class="com.onlinetutoring.model.Tags" />
+		<mapping class="com.onlinetutoring.model.User" />
+		<mapping class="com.onlinetutoring.model.UserRole" />
+		<mapping class="com.onlinetutoring.model.VotingQuestion" />
+		<mapping class="com.onlinetutoring.model.VotingAnswer" />
+		<mapping class="com.onlinetutoring.model.ViewQuestion" />
+
+
+	</session-factory>
+</hibernate-configuration>

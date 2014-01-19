@@ -1,0 +1,61 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- <http auto-config="true"> -->
+ 	<http 	use-expressions="true"> 
+	<!-- 	<intercept-url pattern="/searchquestions*" access="ROLE_GUEST,ROLE_USER,ROLE_MODERATOR,ROLE_ADMIN" /> -->
+	<!-- 	<intercept-url pattern="/MyData*" access="ROLE_ADMIN" /> -->
+		<intercept-url pattern="/questionPost*" access="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR','ROLE_USER')" />
+		<intercept-url pattern="/postAnswer*" access="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')" />
+		<intercept-url pattern="/questionDelete*" access="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR','ROLE_USER')"  />
+		<intercept-url pattern="/viewQuestion*" access="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR','ROLE_USER','ROLE_GUEST')"  />
+		<intercept-url pattern="/admin*" access="hasAnyRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/viewProfile*" access="hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_GUEST','ROLE_MODERATOR')" />
+		<intercept-url pattern="/success*" access="hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_GUEST','ROLE_MODERATOR')" />
+		<anonymous username="guest" granted-authority="hasAnyRole('ROLE_GUEST')" />
+		
+		
+		<form-login login-page="/login" default-target-url="/home"
+			authentication-failure-url="/loginfailed" />
+		<logout logout-success-url="/home" />
+		<access-denied-handler error-page="/403"/>
+		
+		
+		<!-- <anonymous username="guest" granted-authority="ROLE_GUEST" /> ,ROLE_GUEST -->
+		<!-- <form-login login-page="/login.jsp" />
+		<form-login login-page="/login.jsp" default-target-url="/messageList"
+			authentication-failure-url="/login.jsp?error=true" />
+		<logout logout-success-url="/index.jsp" />
+		<access-denied-handler error-page="/403"/> -->
+	<!-- 	
+		<intercept-url pattern="/welcome*" access="ROLE_ADMIN,ROLE_USER" />
+		<intercept-url pattern="/user/**" access="ROLE_ADMIN,ROLE_USER"/>
+		<intercept-url pattern="/admin/**" access="ROLE_ADMIN"/> -->
+		 <remember-me key="keyOnlinetutoring" />
+	</http>  
+	
+ 
+	
+	  
+
+	<authentication-manager>
+		<authentication-provider>
+			<password-encoder hash="sha-256" />
+			<!-- <user-service> <user name="admin" password="admin" authorities="ROLE_ADMIN,ROLE_USER" 
+				/> <user name="user1" password="user1" authorities="ROLE_USER" /> </user-service> -->
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query=
+							"SELECT user_name,password,'true' as enabled 
+								FROM user
+								WHERE user_name= ?"
+				authorities-by-username-query=
+							"SELECT user.user_name,user_role.role
+							FROM user,user_role
+							WHERE user.user_name= ? AND user.roleId=user_role.role_id" />
+	 	</authentication-provider>
+	</authentication-manager>
+</beans:beans>
